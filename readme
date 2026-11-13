@@ -3,12 +3,12 @@ Assignment 4 readme File
 ------------------------------------------------------------------------
 Student 1: What is your name?
 
-
+Eesha Sutaria
 
 ------------------------------------------------------------------------
 Student 2: What is your name?
 
-
+Maria Wiik 
 
 ------------------------------------------------------------------------
 Student 1: What authorized sources of information did you use to
@@ -145,9 +145,9 @@ the error manifests itself or is "noticed" by the client.
 
       Executable         Function with the underlying error
 ===============================================================
-         ./bdtBad1        
+         ./bdtBad1        BDT_insert (no isInitialized check)
 ---------------------------------------------------------------
-         ./bdtBad2        
+         ./bdtBad2        BDT_rm
 ---------------------------------------------------------------
          ./bdtBad3        
 ---------------------------------------------------------------
