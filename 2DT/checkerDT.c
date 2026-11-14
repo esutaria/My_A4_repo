@@ -70,6 +70,10 @@ for(i = 0; i < Node_getNumChildren(oNNode); i++) {
 
    oNPrev = oNChild;
 }
+if(CheckerDT_countNodes(oNRoot) != ulCount) {
+   fprintf(stderr, "Node count does not match the nodes in the tree\n");
+   return FALSE;
+}
    return TRUE;
 }
 
