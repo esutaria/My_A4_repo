@@ -35,11 +35,13 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPNPath;
    Path_T oPPPath;
    size_t i;
+   size_t j;
    int iStatus;
    int iCompare;
+   boolean bFound;
    Node_T oNChild = NULL;
    Node_T oNPrev = NULL;
-
+   Node_T oNSibling = NULL;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -60,33 +62,50 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
                  Path_getPathname(oPPPath), Path_getPathname(oPNPath));
          return FALSE;
       }
-   }
 
-
-for(i = 0; i < Node_getNumChildren(oNNode); i++) {
-   iStatus = Node_getChild(oNNode, i, &oNChild);
-   if(iStatus != SUCCESS) {
-      fprintf(stderr, "Could not get a child within range\n");
-      return FALSE;
-   }
-
-
-   /* children must be in increasing path order because a binary search is used when checking if something is already in the tree*/
-   if(i > 0) {
-      iCompare = Path_comparePath(Node_getPath(oNPrev),
-                                  Node_getPath(oNChild));
-      if(iCompare == 0) {
-         fprintf(stderr, "A node has two children with the same path\n");
-         return FALSE;
+      /* a node with a parent must appear in that parent's children */
+      bFound = FALSE;
+      for(j = 0; j < Node_getNumChildren(oNParent); j++) {
+         iStatus = Node_getChild(oNParent, j, &oNSibling);
+         if(iStatus == SUCCESS && oNSibling == oNNode)
+            bFound = TRUE;
       }
-      if(iCompare > 0) {
-         fprintf(stderr, "A node's children are not in order\n");
+      if(!bFound) {
+         fprintf(stderr, "A node is not in its parent's children\n");
          return FALSE;
       }
    }
 
-   oNPrev = oNChild;
-}
+   for(i = 0; i < Node_getNumChildren(oNNode); i++) {
+      iStatus = Node_getChild(oNNode, i, &oNChild);
+      if(iStatus != SUCCESS) {
+         fprintf(stderr, "Could not get a child within range\n");
+         return FALSE;
+      }
+
+      /* the child must point back to the node that holds it */
+      if(Node_getParent(oNChild) != oNNode) {
+         fprintf(stderr, "A child's parent is not the node holding it\n");
+         return FALSE;
+      }
+
+      /* children must be in increasing path order because a binary
+         search is used to check if something is already in the tree */
+      if(i > 0) {
+         iCompare = Path_comparePath(Node_getPath(oNPrev),
+                                     Node_getPath(oNChild));
+         if(iCompare == 0) {
+            fprintf(stderr, "A node has two children with the same path\n");
+            return FALSE;
+         }
+         if(iCompare > 0) {
+            fprintf(stderr, "A node's children are not in order\n");
+            return FALSE;
+         }
+      }
+
+      oNPrev = oNChild;
+   }
 
    return TRUE;
 }
@@ -102,9 +121,6 @@ for(i = 0; i < Node_getNumChildren(oNNode); i++) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
-   size_t j;
-   boolean bFound;
-   Node_T oNSibling = NULL;
 
    if(oNNode!= NULL) {
 
@@ -113,28 +129,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
 
-      /* a node with a parent must appear in that parent's children */
-      if(oNParent != NULL) {
-         bFound = FALSE;
-         for(j = 0; j < Node_getNumChildren(oNParent); j++) {
-            iStatus = Node_getChild(oNParent, j, &oNSibling);
-            if(iStatus == SUCCESS && oNSibling == oNNode)
-               bFound = TRUE;
-         }
-         if(!bFound) {
-            fprintf(stderr, "A node is not in its parent's children\n");
-            return FALSE;
-         }
-      }
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
       {
          Node_T oNChild = NULL;
-
-         if(Node_getParent(oNChild) != oNNode) {
-            fprintf(stderr, "A child's parent is not the node holding it\n");
-            return FALSE;
-         }
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
 
          if(iStatus != SUCCESS) {
