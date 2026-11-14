@@ -102,6 +102,9 @@ for(i = 0; i < Node_getNumChildren(oNNode); i++) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
+   size_t j;
+   boolean bFound;
+   Node_T oNSibling = NULL;
 
    if(oNNode!= NULL) {
 
@@ -110,10 +113,28 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
 
+      /* a node with a parent must appear in that parent's children */
+      if(oNParent != NULL) {
+         bFound = FALSE;
+         for(j = 0; j < Node_getNumChildren(oNParent); j++) {
+            iStatus = Node_getChild(oNParent, j, &oNSibling);
+            if(iStatus == SUCCESS && oNSibling == oNNode)
+               bFound = TRUE;
+         }
+         if(!bFound) {
+            fprintf(stderr, "A node is not in its parent's children\n");
+            return FALSE;
+         }
+      }
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
       {
          Node_T oNChild = NULL;
+
+         if(Node_getParent(oNChild) != oNNode) {
+            fprintf(stderr, "A child's parent is not the node holding it\n");
+            return FALSE;
+         }
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
 
          if(iStatus != SUCCESS) {
