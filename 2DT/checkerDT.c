@@ -17,7 +17,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
-   Node_T oNChild, oNPrev;
+   size_t i;
+   int iStatus;
+   int iCompare;
+   Node_T oNChild = NULL;
+   Node_T oNPrev = NULL;
 
 
    /* Sample check: a NULL pointer is not a valid node */
@@ -44,24 +48,33 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       size_t i;
 
 for(i = 0; i < Node_getNumChildren(oNNode); i++) {
-   // (void) Node_getChild(oNNode, i, &oNChild);
+   iStatus = Node_getChild(oNNode, i, &oNChild);
+   if(iStatus != SUCCESS) {
+      fprintf(stderr, "Could not get a child within range\n");
+      return FALSE;
+   }
 
    // if(Node_getParent(oNChild) != oNNode) {
    //    fprintf(stderr, "A child's parent is not the node holding it\n");
    //    return FALSE;
    // }
 
+   /* children must be in increasing path order because a binary search is used when checking if something is already in the tree*/
    if(i > 0) {
-      Node_getChild(oNNode, i - 1, &oNPrev);
-      if(Path_comparePath(Node_getPath(oNPrev),
-                          Node_getPath(oNChild)) >= 0) {
-         fprintf(stderr, "Children not in strictly increasing path order "
-                         "(duplicate or out of order)\n");
+      iCompare = Path_comparePath(Node_getPath(oNPrev),
+                                  Node_getPath(oNChild));
+      if(iCompare == 0) {
+         fprintf(stderr, "A node has two children with the same path\n");
+         return FALSE;
+      }
+      if(iCompare > 0) {
+         fprintf(stderr, "A node's children are not in order\n");
          return FALSE;
       }
    }
-}
 
+   oNPrev = oNChild;
+}
    return TRUE;
 }
 
