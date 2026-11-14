@@ -17,6 +17,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
+   Node_T oNChild, oNPrev;
+
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -38,6 +40,27 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          return FALSE;
       }
    }
+
+      size_t i;
+
+for(i = 0; i < Node_getNumChildren(oNNode); i++) {
+   (void) Node_getChild(oNNode, i, &oNChild);
+
+   if(Node_getParent(oNChild) != oNNode) {
+      fprintf(stderr, "A child's parent is not the node holding it\n");
+      return FALSE;
+   }
+
+   if(i > 0) {
+      (void) Node_getChild(oNNode, i - 1, &oNPrev);
+      if(Path_comparePath(Node_getPath(oNPrev),
+                          Node_getPath(oNChild)) >= 0) {
+         fprintf(stderr, "Children not in strictly increasing path order "
+                         "(duplicate or out of order)\n");
+         return FALSE;
+      }
+   }
+}
 
    return TRUE;
 }
