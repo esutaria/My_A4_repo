@@ -11,6 +11,23 @@
 #include "path.h"
 
 
+/* Returns the number of nodes in the subtree rooted at oNNode. */
+static size_t CheckerDT_countNodes(Node_T oNNode) {
+   size_t ulIndex;
+   size_t ulTotal = 1;
+   int iStatus;
+   Node_T oNChild = NULL;
+
+   if(oNNode == NULL)
+      return 0;
+
+   for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+      iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+      if(iStatus == SUCCESS)
+         ulTotal += CheckerDT_countNodes(oNChild);
+   }
+   return ulTotal;
+}
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
