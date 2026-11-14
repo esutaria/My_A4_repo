@@ -70,10 +70,7 @@ for(i = 0; i < Node_getNumChildren(oNNode); i++) {
 
    oNPrev = oNChild;
 }
-if(CheckerDT_countNodes(oNRoot) != ulCount) {
-   fprintf(stderr, "Node count does not match the nodes in the tree\n");
-   return FALSE;
-}
+
    return TRUE;
 }
 
@@ -128,6 +125,10 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          return FALSE;
       }
 
+   if(CheckerDT_countNodes(oNRoot) != ulCount) {
+      fprintf(stderr, "Node count does not match the nodes in the tree\n");
+      return FALSE;
+}
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot);
 }
