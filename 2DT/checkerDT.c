@@ -54,10 +54,6 @@ for(i = 0; i < Node_getNumChildren(oNNode); i++) {
       return FALSE;
    }
 
-   // if(Node_getParent(oNChild) != oNNode) {
-   //    fprintf(stderr, "A child's parent is not the node holding it\n");
-   //    return FALSE;
-   // }
 
    /* children must be in increasing path order because a binary search is used when checking if something is already in the tree*/
    if(i > 0) {
