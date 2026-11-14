@@ -52,7 +52,7 @@ for(i = 0; i < Node_getNumChildren(oNNode); i++) {
    // }
 
    if(i > 0) {
-      (void) Node_getChild(oNNode, i - 1, &oNPrev);
+      Node_getChild(oNNode, i - 1, &oNPrev);
       if(Path_comparePath(Node_getPath(oNPrev),
                           Node_getPath(oNChild)) >= 0) {
          fprintf(stderr, "Children not in strictly increasing path order "
