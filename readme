@@ -160,6 +160,14 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
+-There is an Inconsistent parameter order in nodeDT.h. For instance, Node_new(oPPath, oNParent, ...) has the path first. Node_hasChild(oNParent, oPPath, ...) has the parent first. 
+-There are inconsistent return conventions in nodeDT.h. Node_getChild returns an int for the status and sets *poNResult to be the child node of oNParent with identifier ulChildID, if one exists, but Node_getParent and Node_getPath return the nodes directly.
+-Node_toString is never actually called by dt.c since DT_toString builds its string itself. This is unnecessary and does not need to be in nodeDT.h.
+-An important concept of modularity is weak coupling. nodeDT.c and checkerDT.h depend on each other, which does not obey this rule
+-In Node_new, there are a lot of ways the process could fail, and there is the same freeing process for each one. Instead of repeating the text several times, we could just create a helper function to free and call it once creating the node goes wrong.
+-This would probably help with ensuring memory is properly freed. For instance, when Node_addChild fails, we don’t free the space allocated for children of the new node. This could have probably been prevented with the modification above.
+-DT_traversePath uses a “magic number” to indicate the node numbers. For example, there could be a constant variable to indicate ROOT_NODE = 1, instead of using just the number (line 68). It would be better for understanding the code and correcting it.
+-Poor naming for the parameters of DT_preOrderTraversal (line 336). One letter names are not good indicators of what the variables stand for - not good for readability.
 
 
 ------------------------------------------------------------------------
