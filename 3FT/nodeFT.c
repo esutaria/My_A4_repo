@@ -69,6 +69,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, 
     int iStatus;
 
     assert(oPPath != NULL);
+    assert(pvContents != NULL);
     assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
 
     psNew = malloc(sizeof(struct node));
@@ -340,6 +341,7 @@ boolean Node_isFile(Node_T oNNode)
 
         assert(oNNode != NULL);
         assert(oNNode->isFile);
+        assert(pvNewContents != NULL);
 
         pvOldContents = oNNode->pvContents;
         oNNode->pvContents = pvNewContents;
