@@ -69,7 +69,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, 
     int iStatus;
 
     assert(oPPath != NULL);
-    assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+    assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
 
     psNew = malloc(sizeof(struct node));
 
@@ -206,7 +206,7 @@ size_t Node_free(Node_T oNNode)
     size_t ulCount = 0;
 
     assert(oNNode != NULL);
-    assert(CheckerDT_Node_isValid(oNNode));
+    assert(CheckerFT_Node_isValid(oNNode));
 
     /* remove from parent's list */
     if (oNNode->oNParent != NULL)
