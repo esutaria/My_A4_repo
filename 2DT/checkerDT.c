@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* checkerDT.c                                                        */
-/* Author:                                                            */
+/* Author: Eesha Sutaria, Maria Wiik                                  */
 /*--------------------------------------------------------------------*/
 
 #include <assert.h>
@@ -115,9 +115,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Returns FALSE if a broken invariant is found and
    returns TRUE otherwise.
 
-   You may want to change this function's return type or
-   parameter list to facilitate constructing your checks.
-   If you do, you should update this function comment.
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
