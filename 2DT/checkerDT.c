@@ -31,6 +31,9 @@ static size_t CheckerDT_countNodes(Node_T oNNode) {
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
+   /* i and j are loop counters. oNPrev is the child before the current
+      one, for the order check. oNSibling is a child of oNParent seen
+      while looking for oNNode, and bFound records whether it was there. */
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
@@ -65,6 +68,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
       /* a node with a parent must appear in that parent's children */
       bFound = FALSE;
+      /* look for oNNode among its parent's children */
       for(j = 0; j < Node_getNumChildren(oNParent); j++) {
          iStatus = Node_getChild(oNParent, j, &oNSibling);
          if(iStatus == SUCCESS && oNSibling == oNNode)
@@ -78,6 +82,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    /* Check each child of the node */
    for(i = 0; i < Node_getNumChildren(oNNode); i++) {
+      /* getNumChildren says this child exists, so getChild must work */
       iStatus = Node_getChild(oNNode, i, &oNChild);
       if(iStatus != SUCCESS) {
          fprintf(stderr, "Could not get a child within range\n");
@@ -104,10 +109,10 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             return FALSE;
          }
       }
-
+      /* keep this child so the next one can be compared against it */
       oNPrev = oNChild;
    }
-
+   /* All checks passed */
    return TRUE;
 }
 
