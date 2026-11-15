@@ -16,7 +16,7 @@
 #include "ft.h"
 
 /*
-  A Directory Tree is a representation of a hierarchy of directories,
+  A File Tree is a representation of a hierarchy of directories and/or files,
   represented as an AO with 3 state variables:
 */
 
@@ -30,13 +30,13 @@ static size_t ulCount;
 /* --------------------------------------------------------------------
 
   The FT_traversePath and FT_findNode functions modularize the common
-  functionality of going as far as possible down an DT towards a path
+  functionality of going as far as possible down an FT towards a path
   and returning either the node of however far was reached or the
   node if the full path was reached, respectively.
 */
 
 /*
-  Traverses the DT starting at the root as far as possible towards
+  Traverses the FT starting at the root as far as possible towards
   absolute path oPPath. If able to traverse, returns an int SUCCESS
   status and sets *poNFurthest to the furthest node reached (which may
   be only a prefix of oPPath, or even NULL if the root is NULL).
@@ -117,10 +117,10 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
 }
 
 /*
-  Traverses the DT to find a node with absolute path pcPath. Returns a
+  Traverses the FT to find a node with absolute path pcPath. Returns a
   int SUCCESS status and sets *poNResult to be the node, if found.
   Otherwise, sets *poNResult to NULL and returns with status:
-  * INITIALIZATION_ERROR if the DT is not in an initialized state
+  * INITIALIZATION_ERROR if the FT is not in an initialized state
   * BAD_PATH if pcPath does not represent a well-formatted path
   * CONFLICTING_PATH if the root's path is not a prefix of pcPath
   * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
@@ -491,7 +491,7 @@ int FT_destroy(void)
 /* --------------------------------------------------------------------
 
   The following auxiliary functions are used for generating the
-  string representation of the DT.
+  string representation of the FT.
 */
 
 /*
@@ -499,7 +499,8 @@ int FT_destroy(void)
   inserting each payload to DynArray_T d beginning at index i.
   Returns the next unused index in d after the insertion(s).
 */
-static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
+static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) 
+{
    size_t c;
    int iStatus;
    Node_T oNChild = NULL;
@@ -570,6 +571,10 @@ char *FT_toString(void)
         return NULL;
 
     nodes = DynArray_new(ulCount);
+    if (nodes == NULL) 
+    {
+        return NULL;
+    }
     (void)FT_preOrderTraversal(oNRoot, nodes, 0);
 
     DynArray_map(nodes, (void (*)(void *, void *))FT_strlenAccumulate,
