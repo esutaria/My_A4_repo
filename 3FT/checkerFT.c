@@ -49,6 +49,12 @@ boolean CheckerFT_Node_isValid(Node_T oNNode) {
       return FALSE;
    }
 
+   /* a file is a leaf, so it cannot have children */
+    if (Node_isFile(oNNode) && Node_getNumChildren(oNNode) != 0)
+    {
+        fprintf(stderr, "A file has children\n");
+        return FALSE;
+    }
    /* Sample check: parent's path must be the longest possible
       proper prefix of the node's path */
    oNParent = Node_getParent(oNNode);
