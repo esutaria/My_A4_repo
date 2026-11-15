@@ -3,8 +3,8 @@
 # Author: Eesha and Maria
 #--------------------------------------------------------------------
 
-CC = gcc217
-#CC = gcc217m
+#CC = gcc217
+CC = gcc217m
 
 ft: dynarray.o path.o checkerFT.o nodeFT.o ft.o ft_client.o
 	$(CC) -g dynarray.o path.o checkerFT.o nodeFT.o ft.o ft_client.o -o ft
