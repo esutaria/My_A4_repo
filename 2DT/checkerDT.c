@@ -31,9 +31,6 @@ static size_t CheckerDT_countNodes(Node_T oNNode) {
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
-   /* i and j are loop counters. oNPrev is the child before the current
-      one, for the order check. oNSibling is a child of oNParent seen
-      while looking for oNNode, and bFound records whether it was there. */
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;

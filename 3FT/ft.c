@@ -319,7 +319,6 @@ int FT_insertDir(const char *pcPath)
 int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength)
 {
-    assert(pvContents != NULL);
     return FT_insertPath(pcPath, TRUE, pvContents, ulLength);
 }
 
@@ -459,7 +458,6 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
     Node_T oNFound = NULL;
 
     assert(pcPath != NULL);
-    assert(pvNewContents != NULL);
     assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
 
     iStatus = FT_findNode(pcPath, &oNFound);
