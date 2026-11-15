@@ -16,8 +16,8 @@
 #include "ft.h"
 
 /*
-  A File Tree is a representation of a hierarchy of directories and/or files,
-  represented as an AO with 3 state variables:
+ A File Tree is a representation of a hierarchy of directories and/or files,
+ represented as an AO with 3 state variables:
 */
 
 /* 1. a flag for being in an initialized state (TRUE) or not (FALSE) */
@@ -29,20 +29,23 @@ static size_t ulCount;
 
 /* --------------------------------------------------------------------
 
-  The FT_traversePath and FT_findNode functions modularize the common
-  functionality of going as far as possible down an FT towards a path
-  and returning either the node of however far was reached or the
-  node if the full path was reached, respectively.
+
+
+
+ The FT_traversePath and FT_findNode functions modularize the common
+ functionality of going as far as possible down an FT towards a path
+ and returning either the node of however far was reached or the
+ node if the full path was reached, respectively.
 */
 
 /*
-  Traverses the FT starting at the root as far as possible towards
-  absolute path oPPath. If able to traverse, returns an int SUCCESS
-  status and sets *poNFurthest to the furthest node reached (which may
-  be only a prefix of oPPath, or even NULL if the root is NULL).
-  Otherwise, sets *poNFurthest to NULL and returns with status:
-  * CONFLICTING_PATH if the root's path is not a prefix of oPPath
-  * MEMORY_ERROR if memory could not be allocated to complete request
+ Traverses the FT starting at the root as far as possible towards
+ absolute path oPPath. If able to traverse, returns an int SUCCESS
+ status and sets *poNFurthest to the furthest node reached (which may
+ be only a prefix of oPPath, or even NULL if the root is NULL).
+ Otherwise, sets *poNFurthest to NULL and returns with status:
+ * CONFLICTING_PATH if the root's path is not a prefix of oPPath
+ * MEMORY_ERROR if memory could not be allocated to complete request
 */
 static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
 {
@@ -117,15 +120,15 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
 }
 
 /*
-  Traverses the FT to find a node with absolute path pcPath. Returns a
-  int SUCCESS status and sets *poNResult to be the node, if found.
-  Otherwise, sets *poNResult to NULL and returns with status:
-  * INITIALIZATION_ERROR if the FT is not in an initialized state
-  * BAD_PATH if pcPath does not represent a well-formatted path
-  * CONFLICTING_PATH if the root's path is not a prefix of pcPath
-  * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
-  * MEMORY_ERROR if memory could not be allocated to complete request
- */
+ Traverses the FT to find a node with absolute path pcPath. Returns a
+ int SUCCESS status and sets *poNResult to be the node, if found.
+ Otherwise, sets *poNResult to NULL and returns with status:
+ * INITIALIZATION_ERROR if the FT is not in an initialized state
+ * BAD_PATH if pcPath does not represent a well-formatted path
+ * CONFLICTING_PATH if the root's path is not a prefix of pcPath
+ * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
+ * MEMORY_ERROR if memory could not be allocated to complete request
+*/
 static int FT_findNode(const char *pcPath, Node_T *poNResult)
 {
     Path_T oPPath = NULL;
@@ -174,15 +177,14 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult)
     *poNResult = oNFound;
     return SUCCESS;
 }
-/*--------------------------------------------------------------------*/
 
 /*
-  Inserts a new node with absolute path pcPath into the FT, creating
-  any missing ancestor directories. The last node is a file holding
-  pvContents of length ulLength if isFile is TRUE, otherwise it is a
-  directory (pvContents and ulLength are then ignored). Returns
-  SUCCESS, or one of the statuses listed for FT_insertDir and
-  FT_insertFile in ft.h.
+ Inserts a new node with absolute path pcPath into the FT, creating
+ any missing ancestor directories. The last node is a file holding
+ pvContents of length ulLength if isFile is TRUE, otherwise it is a
+ directory (pvContents and ulLength are then ignored). Returns
+ SUCCESS, or one of the statuses listed for FT_insertDir and
+ FT_insertFile in ft.h.
 */
 static int FT_insertPath(const char *pcPath, boolean isFile,
                          void *pvContents, size_t ulLength)
@@ -295,17 +297,38 @@ static int FT_insertPath(const char *pcPath, boolean isFile,
     return SUCCESS;
 }
 
+/* Function to insert directory based on pcPath (path given).
+   Uses FR_insertPath. The way it is specific for a
+   dir is that isFile = FALSE and there should be no
+   pcContents (NULL) and the length of the contents
+   should thus be 0 */
 int FT_insertDir(const char *pcPath)
 {
     return FT_insertPath(pcPath, FALSE, NULL, 0);
 }
 
+/* FT_insertFile works the same way as insertDir
+   (by using the pcPath to traverse the tree
+   until it find the most in depth node there
+   and insert new nodes where they are needed).
+   It adds the actual values for contents
+   and the length of the contents - that is why
+   we have the extra parameters (pvContents
+   and ulLength).
+*/
 int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength)
 {
+    assert(pvContents != NULL);
     return FT_insertPath(pcPath, TRUE, pvContents, ulLength);
 }
 
+/* FT_containsDir takes a path as input and checks
+   whether that path can be found in the tree
+   i.e. if the notes
+   If there is a file with the same path,
+   it will return FALSE
+*/
 boolean FT_containsDir(const char *pcPath)
 {
     int iStatus;
@@ -320,6 +343,11 @@ boolean FT_containsDir(const char *pcPath)
     return (boolean)!Node_isFile(oNFound);
 }
 
+/* Based on the path provided (pcPath),
+check if the file is in the tree.
+If there is a directory with the same path,
+it will return FALSE
+*/
 boolean FT_containsFile(const char *pcPath)
 {
     int iStatus;
@@ -334,6 +362,10 @@ boolean FT_containsFile(const char *pcPath)
     return (boolean)Node_isFile(oNFound);
 }
 
+/* This function tries to remove the directory with path
+pcPath. If there is a file with the same path, it will not
+be removed.
+*/
 int FT_rmDir(const char *pcPath)
 {
     int iStatus;
@@ -359,6 +391,10 @@ int FT_rmDir(const char *pcPath)
     return SUCCESS;
 }
 
+/* This function tries to remove the directory with path
+pcPath. If there is a dir with the same path, it will not
+be removed.
+*/
 int FT_rmFile(const char *pcPath)
 {
     int iStatus;
@@ -384,6 +420,11 @@ int FT_rmFile(const char *pcPath)
     return SUCCESS;
 }
 
+/* FT_getFileContents gets the file contents associated with
+the path pcPath. It first checks if this path or node exist in
+the tree. Then, it ensures the path does not correspond
+to a dir (as those do not have contents).
+*/
 void *FT_getFileContents(const char *pcPath)
 {
     int iStatus;
@@ -404,12 +445,21 @@ void *FT_getFileContents(const char *pcPath)
     return Node_getContents(oNFound);
 }
 
+/* FT_replaceFileContents replaces the file contents associated with
+the path pcPath. It first checks if this path or node exist in
+the tree. Then, it ensures the path does not correspond
+to a dir (as those do not have contents).
+It will modify the contents to have what pvNewContents stores,
+and it will have a new length ulNewLength.
+*/
 void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
-                             size_t ulNewLength){
+                             size_t ulNewLength)
+{
     int iStatus;
     Node_T oNFound = NULL;
 
     assert(pcPath != NULL);
+    assert(pvNewContents != NULL);
     assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
 
     iStatus = FT_findNode(pcPath, &oNFound);
@@ -424,13 +474,19 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
     return Node_replaceContents(oNFound, pvNewContents, ulNewLength);
 }
 
-int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
+/*
+ Reports information about the node at absolute path pcPath.
+ If the node is found and it is a file, isFile = TRUE and
+ pulSize = length of file contents (in bytes). If it's a dir,
+ the only change is isFile = false.
+*/
+int FT_stat(const char *pcPath, boolean *isFile, size_t *pulSize)
 {
     int iStatus;
     Node_T oNFound = NULL;
 
     assert(pcPath != NULL);
-    assert(pbIsFile != NULL);
+    assert(isFile != NULL);
     assert(pulSize != NULL);
 
     iStatus = FT_findNode(pcPath, &oNFound);
@@ -441,19 +497,21 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
 
     if (Node_isFile(oNFound))
     {
-        *pbIsFile = TRUE;
+        *isFile = TRUE;
         *pulSize = Node_getLength(oNFound);
     }
     else
     {
         /* for a directory, *pulSize stays unchanged */
-        *pbIsFile = FALSE;
+        *isFile = FALSE;
     }
 
     return SUCCESS;
-
 }
 
+/* Initialization of the tree. Sets bIsInitialized to TRUE to
+ensure there will only ever be one tree
+It does not yet create any nodes. */
 int FT_init(void)
 {
     assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
@@ -469,13 +527,14 @@ int FT_init(void)
     return SUCCESS;
 }
 
+/* This destroys the entire tree (all of its nodes)
+   and frees each node and its contents */
 int FT_destroy(void)
 {
     assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
 
     if (!bIsInitialized)
         return INITIALIZATION_ERROR;
-
     if (oNRoot)
     {
         ulCount -= Node_free(oNRoot);
@@ -489,52 +548,53 @@ int FT_destroy(void)
 }
 
 /* --------------------------------------------------------------------
-
-  The following auxiliary functions are used for generating the
-  string representation of the FT.
+ The following auxiliary functions are used for generating the
+ string representation of the FT.
 */
 
 /*
-  Performs a pre-order traversal of the tree rooted at n,
-  inserting each payload to DynArray_T d beginning at index i.
-  Returns the next unused index in d after the insertion(s).
+ Performs a pre-order traversal of the tree rooted at n,
+ inserting each payload to DynArray_T d beginning at index i.
+ Returns the next unused index in d after the insertion(s).
 */
-static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) 
+static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i)
 {
-   size_t c;
-   int iStatus;
-   Node_T oNChild = NULL;
+    size_t c;
+    int iStatus;
+    Node_T oNChild = NULL;
 
-   assert(d != NULL);
+    assert(d != NULL);
 
-   if(n != NULL) {
-      (void) DynArray_set(d, i, n);
-      i++;
+    if (n != NULL)
+    {
+        (void)DynArray_set(d, i, n);
+        i++;
 
-      /* first pass: file children only */
-      for(c = 0; c < Node_getNumChildren(n); c++) {
-         iStatus = Node_getChild(n, c, &oNChild);
-         assert(iStatus == SUCCESS);
-         if(Node_isFile(oNChild))
-            i = FT_preOrderTraversal(oNChild, d, i);
-      }
+        /* first pass: file children only */
+        for (c = 0; c < Node_getNumChildren(n); c++)
+        {
+            iStatus = Node_getChild(n, c, &oNChild);
+            assert(iStatus == SUCCESS);
+            if (Node_isFile(oNChild))
+                i = FT_preOrderTraversal(oNChild, d, i);
+        }
 
-      /* second pass: directory children only */
-      for(c = 0; c < Node_getNumChildren(n); c++) {
-         iStatus = Node_getChild(n, c, &oNChild);
-         assert(iStatus == SUCCESS);
-         if(!Node_isFile(oNChild))
-            i = FT_preOrderTraversal(oNChild, d, i);
-      }
-   }
-   return i;
+        /* second pass: directory children only */
+        for (c = 0; c < Node_getNumChildren(n); c++)
+        {
+            iStatus = Node_getChild(n, c, &oNChild);
+            assert(iStatus == SUCCESS);
+            if (!Node_isFile(oNChild))
+                i = FT_preOrderTraversal(oNChild, d, i);
+        }
+    }
+    return i;
 }
 
-
 /*
-  Alternate version of strlen that uses pulAcc as an in-out parameter
-  to accumulate a string length, rather than returning the length of
-  oNNode's path, and also always adds one addition byte to the sum.
+ Alternate version of strlen that uses pulAcc as an in-out parameter
+ to accumulate a string length, rather than returning the length of
+ oNNode's path, and also always adds one addition byte to the sum.
 */
 static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc)
 {
@@ -545,9 +605,9 @@ static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc)
 }
 
 /*
-  Alternate version of strcat that inverts the typical argument
-  order, appending oNNode's path onto pcAcc, and also always adds one
-  newline at the end of the concatenated string.
+ Alternate version of strcat that inverts the typical argument
+ order, appending oNNode's path onto pcAcc, and also always adds one
+ newline at the end of the concatenated string.
 */
 static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc)
 {
@@ -559,8 +619,7 @@ static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc)
         strcat(pcAcc, "\n");
     }
 }
-/*--------------------------------------------------------------------*/
-
+/* Provides string representation of the tree - all paths represented */
 char *FT_toString(void)
 {
     DynArray_T nodes;
@@ -571,7 +630,7 @@ char *FT_toString(void)
         return NULL;
 
     nodes = DynArray_new(ulCount);
-    if (nodes == NULL) 
+    if (nodes == NULL)
     {
         return NULL;
     }
@@ -592,6 +651,5 @@ char *FT_toString(void)
                  (void *)result);
 
     DynArray_free(nodes);
-
     return result;
 }

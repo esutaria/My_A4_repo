@@ -65,11 +65,10 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, 
     Path_T oPParentPath = NULL;
     Path_T oPNewPath = NULL;
     size_t ulParentDepth;
-    size_t ulIndex;
+    size_t ulIndex = 0;
     int iStatus;
 
     assert(oPPath != NULL);
-    assert(pvContents != NULL);
     assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
 
     psNew = malloc(sizeof(struct node));
@@ -186,6 +185,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, 
         if (iStatus != SUCCESS)
         {
             DynArray_free(psNew->oDChildren);
+            Path_free(psNew->oPPath);
             free(psNew);
             *poNResult = NULL;
             return iStatus;
@@ -201,9 +201,22 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, 
     return SUCCESS;
 }
 
+/*
+  Compares oNFirst and oNSecond lexicographically based on their paths.
+  Returns <0, 0, or >0 if oNFirst is "less than", "equal to", or
+  "greater than" oNSecond, respectively.
+*/
+static int Node_compare(Node_T oNFirst, Node_T oNSecond)
+{
+    assert(oNFirst != NULL);
+    assert(oNSecond != NULL);
+
+    return Path_comparePath(oNFirst->oPPath, oNSecond->oPPath);
+}
+
 size_t Node_free(Node_T oNNode)
 {
-    size_t ulIndex;
+    size_t ulIndex = 0;
     size_t ulCount = 0;
 
     assert(oNNode != NULL);
@@ -290,14 +303,6 @@ Node_T Node_getParent(Node_T oNNode)
     return oNNode->oNParent;
 }
 
-int Node_compare(Node_T oNFirst, Node_T oNSecond)
-{
-    assert(oNFirst != NULL);
-    assert(oNSecond != NULL);
-
-    return Path_comparePath(oNFirst->oPPath, oNSecond->oPPath);
-}
-
 char *Node_toString(Node_T oNNode)
 {
     char *copyPath;
@@ -312,40 +317,39 @@ char *Node_toString(Node_T oNNode)
 }
 
 boolean Node_isFile(Node_T oNNode)
-    {
-        assert(oNNode != NULL);
+{
+    assert(oNNode != NULL);
 
-        return oNNode->isFile;
-    }
+    return oNNode->isFile;
+}
 
-    void *Node_getContents(Node_T oNNode)
-    {
-        assert(oNNode != NULL);
-        assert(oNNode->isFile);
+void *Node_getContents(Node_T oNNode)
+{
+    assert(oNNode != NULL);
+    assert(oNNode->isFile);
 
-        return oNNode->pvContents;
-    }
+    return oNNode->pvContents;
+}
 
-    size_t Node_getLength(Node_T oNNode)
-    {
-        assert(oNNode != NULL);
-        assert(oNNode->isFile);
+size_t Node_getLength(Node_T oNNode)
+{
+    assert(oNNode != NULL);
+    assert(oNNode->isFile);
 
-        return oNNode->ulLength;
-    }
+    return oNNode->ulLength;
+}
 
-    void *Node_replaceContents(Node_T oNNode, void *pvNewContents,
-                            size_t ulNewLength)
-    {
-        void *pvOldContents;
+void *Node_replaceContents(Node_T oNNode, void *pvNewContents,
+                        size_t ulNewLength)
+{
+    void *pvOldContents;
 
-        assert(oNNode != NULL);
-        assert(oNNode->isFile);
-        assert(pvNewContents != NULL);
+    assert(oNNode != NULL);
+    assert(oNNode->isFile);
 
-        pvOldContents = oNNode->pvContents;
-        oNNode->pvContents = pvNewContents;
-        oNNode->ulLength = ulNewLength;
+    pvOldContents = oNNode->pvContents;
+    oNNode->pvContents = pvNewContents;
+    oNNode->ulLength = ulNewLength;
 
-        return pvOldContents;
-    }
+    return pvOldContents;
+}
