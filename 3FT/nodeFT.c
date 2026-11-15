@@ -192,8 +192,8 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, 
     }
 
     *poNResult = psNew;
-    assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
-    assert(CheckerDT_Node_isValid(*poNResult));
+    assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
+    assert(CheckerFT_Node_isValid(*poNResult));
 
     
 
