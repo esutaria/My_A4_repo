@@ -33,7 +33,7 @@ typedef struct node *Node_T;
 */
 int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, void *pvContents, size_t ulLength);
 
-/*Returns 1 if the node is a file, 0 otherwise*/
+/*Returns TRUE if oNNode is a file, FALSE otherwise*/
 boolean Node_isFile(Node_T oNNode);
 
 /*Returns the contents of the node. oNNode must be a file*/
@@ -101,7 +101,7 @@ char *Node_toString(Node_T oNNode);
 /*
   Replaces the contents of file oNNode with pvNewContents of length
   ulNewLength. Returns the old contents, which may be NULL.
-  oNNode must be a file.
+  oNNode must be a file so isFile must be TRUE.
 */
 void *Node_replaceContents(Node_T oNNode, void *pvNewContents, size_t ulNewLength);
 
