@@ -17,6 +17,11 @@ information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
 
+COS 217 lecture materials.
+COS 217 precept materials.
+COS 217 website.
+The man pages on the armlab cluster.
+COS 217 staff and/or current students on Ed.
 
 
 ------------------------------------------------------------------------
@@ -26,7 +31,11 @@ information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
 
-
+COS 217 lecture materials.
+COS 217 precept materials.
+COS 217 website.
+The man pages on the armlab cluster.
+COS 217 staff and/or current students on Ed.
 
 ------------------------------------------------------------------------
 Student 1: What unauthorized sources of information did you use to
@@ -40,7 +49,7 @@ nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 Student 2: What unauthorized sources of information did you use to
@@ -54,7 +63,7 @@ nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 Student 1: In fulfillment of the requirement from section 2.4.3 of the
@@ -64,7 +73,7 @@ guide, enter your name in the space below the following affirmation:
 This paper represents my own work in accordance with University
 regulations.
 
-
+Eesha Sutaria
 
 ------------------------------------------------------------------------
 Student 2: In fulfillment of the requirement from section 2.4.3 of the
@@ -74,7 +83,7 @@ guide, enter your name in the space below the following affirmation:
 This paper represents my own work in accordance with University
 regulations.
 
-
+Maria Wiik
 
 ------------------------------------------------------------------------
 In fulfillment of the requirement from section 2.4.6 of the Academic
@@ -82,18 +91,28 @@ Regulations in Princeton's Rights, Rules, Responsibilities guide,
 and the COS 217 Generative AI policy, disclose and describe how you
 used AI in completing this assignment:
 
-
+We used AI to help guide us in understanding the requirements of the
+assignment and help us debug.
 
 ------------------------------------------------------------------------
 Student 1: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-
+The assignment was very long, but it was helpful. I did not have
+fun doing it.
 
 ------------------------------------------------------------------------
 Student 2: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
+This was a very overwhelming assignment, especially because other courses 
+that many students take concurrently have heavy load assignments or exams 
+around the same period (ORF309, ECE206). This would have been way more fun 
+if we had more time to do it. It was helpful in making me understand the 
+gdb better, and really forced me to be creative and think about invariants. 
+It felt like a brainstorming process, just listing every single thing we 
+could think of and then eliminating the ones that were not actually 
+invariants or that overlapped.
 
 
 ------------------------------------------------------------------------
@@ -102,14 +121,13 @@ will help your grader to grade it in the most favorable light? In
 particular, what bugs are in your submission?
 
 
-
 ------------------------------------------------------------------------
 What warnings does splint generate for Part 2's checker, and what are
 your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+None
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on checkerDT.c, and what are your
@@ -117,6 +135,7 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+None
 
 
 ------------------------------------------------------------------------
@@ -125,6 +144,13 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+path.h:94:13: Function exported but not used outside path
+Path_getComponent. A declaration is exported, but not used outside
+this module. Declaration can use static qualifier.
+(Use -exportlocal to inhibit warning)
+path.c:316:1: Definition of Path_getComponent
+
+We were given path.h and did not edit this file
 
 
 ------------------------------------------------------------------------
@@ -132,6 +158,62 @@ What warnings does critTer generate on your Part 3 code, and what are
 your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
+
+
+   ft.c: line 251: low priority: 
+   A loop should consist of fewer than 35 lines;
+   this loop consists of 36 lines; consider refactoring
+		Our code is well commented and the functions have
+            been working well and with good memory management.
+            We are not treating this as a problem.
+
+
+   ft.c: line 655: low priority: 
+   A file should contain no more than 15 functions;
+   this file contains 18 functions
+		Our code is well commented and the functions have been
+            working well and with good memory management. We are not
+            treating this as a problem.
+
+
+   ft.c: line 191: medium priority:
+   Do you want to validate 'pvContents' through an assert?
+	No, because the contents could be NULL. If they are inserting
+      a directory, pvContents should be NULL.
+
+
+   ft.c: line 306: medium priority:
+   Do you want to validate 'pcPath' through an assert?
+	No, because this function calls FT_insertPath, which will
+      assert this.
+
+
+   ft.c: line 321: medium priority:
+   Do you want to validate 'pcPath' through an assert?
+	No, because this function calls FT_insertPath, which will
+      assert this.
+
+
+   ft.c: line 654: low priority: 
+   A source code file should contain fewer than 500 lines;
+   this file contains 655 lines
+	Our code is well commented and the functions have been
+      working well and with good memory management. We are not
+      treating this as a problem.
+
+   nodeFT.c: line 63: medium priority:
+   Do you want to validate 'pvContents' through an assert?
+      The client passes NULL contents on purpose (FT_insertDir)
+      passes NULL. Ft.h also says contents may be new so we do 
+      not need this assert and adding it would actually make the
+      ./ft crash.
+
+   nodeFT.c: line 344: medium priority:
+   Do you want to validate 'pvNewContents' through an assert?
+
+      FT_insertFile("1root/2second/3gfile", NULL, 0) is a valid call 
+      and ft.h says contents may be NULL. Adding this assert is not 
+      necessary and would make ./ft crash.
 
 
 
@@ -160,14 +242,33 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
--There is an Inconsistent parameter order in nodeDT.h. For instance, Node_new(oPPath, oNParent, ...) has the path first. Node_hasChild(oNParent, oPPath, ...) has the parent first. 
--There are inconsistent return conventions in nodeDT.h. Node_getChild returns an int for the status and sets *poNResult to be the child node of oNParent with identifier ulChildID, if one exists, but Node_getParent and Node_getPath return the nodes directly.
--Node_toString is never actually called by dt.c since DT_toString builds its string itself. This is unnecessary and does not need to be in nodeDT.h.
--An important concept of modularity is weak coupling. nodeDT.c and checkerDT.h depend on each other, which does not obey this rule
--In Node_new, there are a lot of ways the process could fail, and there is the same freeing process for each one. Instead of repeating the text several times, we could just create a helper function to free and call it once creating the node goes wrong.
--This would probably help with ensuring memory is properly freed. For instance, when Node_addChild fails, we don’t free the space allocated for children of the new node. This could have probably been prevented with the modification above.
--DT_traversePath uses a “magic number” to indicate the node numbers. For example, there could be a constant variable to indicate ROOT_NODE = 1, instead of using just the number (line 68). It would be better for understanding the code and correcting it.
--Poor naming for the parameters of DT_preOrderTraversal (line 336). One letter names are not good indicators of what the variables stand for - not good for readability.
+-There is an Inconsistent parameter order in nodeDT.h. For instance,
+Node_new(oPPath, oNParent, ...) has the path first.
+Node_hasChild(oNParent, oPPath, ...) has the parent first. 
+-There are inconsistent return conventions in nodeDT.h.
+Node_getChild returns an int for the status and sets *poNResult to
+be the child node of oNParent with identifier ulChildID, if one exists,
+but Node_getParent and Node_getPath return the nodes directly.
+-Node_toString is never actually called by dt.c since DT_toString
+builds its string itself. This is unnecessary and does not need to
+be in nodeDT.h.
+-An important concept of modularity is weak coupling. nodeDT.c and
+checkerDT.h depend on each other, which does not obey this rule
+-In Node_new, there are a lot of ways the process could fail, and
+there is the same freeing process for each one. Instead of repeating
+the text several times, we could just create a helper function to
+free and call it once creating the node goes wrong.
+-This would probably help with ensuring memory is properly freed.
+For instance, when Node_addChild fails, we don’t free the space
+allocated for children of the new node. This could have probably
+been prevented with the modification above.
+-DT_traversePath uses a “magic number” to indicate the node numbers.
+For example, there could be a constant variable to indicate
+ROOT_NODE = 1, instead of using just the number (line 68). It would
+be better for understanding the code and correcting it.
+-Poor naming for the parameters of DT_preOrderTraversal (line 336).
+One letter names are not good indicators of what the variables
+stand for - not good for readability.
 
 
 ------------------------------------------------------------------------

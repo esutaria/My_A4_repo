@@ -82,6 +82,7 @@ boolean CheckerFT_Node_isValid(Node_T oNNode) {
       }
    }
 
+/* Check each child of the node */
    for(i = 0; i < Node_getNumChildren(oNNode); i++) {
       iStatus = Node_getChild(oNNode, i, &oNChild);
       if(iStatus != SUCCESS) {
