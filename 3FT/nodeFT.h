@@ -31,7 +31,8 @@ typedef struct node *Node_T;
   * NOT_A_DIRECTORY if oNParent is a file
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
-int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, boolean isFile, void *pvContents, size_t ulLength);
+int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult, 
+    boolean isFile, void *pvContents, size_t ulLength);
 
 /*Returns TRUE if oNNode is a file, FALSE otherwise*/
 boolean Node_isFile(Node_T oNNode);
@@ -96,7 +97,9 @@ char *Node_toString(Node_T oNNode);
   ulNewLength. Returns the old contents, which may be NULL.
   oNNode must be a file so isFile must be TRUE.
 */
-void *Node_replaceContents(Node_T oNNode, void *pvNewContents, size_t ulNewLength);
+void *Node_replaceContents(Node_T oNNode, void *pvNewContents, 
+    size_t ulNewLength);
+
 
 
 

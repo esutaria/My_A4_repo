@@ -298,9 +298,9 @@ static int FT_insertPath(const char *pcPath, boolean isFile,
 }
 
 /* Function to insert directory based on pcPath (path given).
-   Uses FR_insertPath. The way it is specific for a
+   Uses FT_insertPath. The way it is specific for a
    dir is that isFile = FALSE and there should be no
-   pcContents (NULL) and the length of the contents
+   pvContents (NULL) and the length of the contents
    should thus be 0 */
 int FT_insertDir(const char *pcPath)
 {
@@ -324,8 +324,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
 
 /* FT_containsDir takes a path as input and checks
    whether that path can be found in the tree
-   i.e. if the notes
-   If there is a file with the same path,
+   i.e. If there is a file with the same path,
    it will return FALSE
 */
 boolean FT_containsDir(const char *pcPath)
@@ -390,8 +389,8 @@ int FT_rmDir(const char *pcPath)
     return SUCCESS;
 }
 
-/* This function tries to remove the directory with path
-pcPath. If there is a dir with the same path, it will not
+/* This function tries to remove the file with path
+pcPath. If there is a file with the same path, it will not
 be removed.
 */
 int FT_rmFile(const char *pcPath)
@@ -476,7 +475,7 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
  Reports information about the node at absolute path pcPath.
  If the node is found and it is a file, pbIsFile = TRUE and
  pulSize = length of file contents (in bytes). If it's a dir,
- the only change is pbIsFile = false.
+ the only change is pbIsFile = FALSE.
 */
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize){
     int iStatus;
@@ -525,7 +524,7 @@ int FT_init(void)
 }
 
 /* This destroys the entire tree (all of its nodes)
-   and frees each node and its contents */
+   and frees each node */
 int FT_destroy(void)
 {
     assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
