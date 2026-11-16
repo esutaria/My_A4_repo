@@ -28,4 +28,4 @@ ft_client.o: ft_client.c ft.h a4def.h
 	$(CC) -g -c ft_client.c
 
 clean:
-	rm -f ft *.o meminfo*.out
+	rm -f ft dynarray.o path.o checkerFT.o nodeFT.o ft.o ft_client.o meminfo*.out

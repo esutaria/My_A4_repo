@@ -474,17 +474,16 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 
 /*
  Reports information about the node at absolute path pcPath.
- If the node is found and it is a file, isFile = TRUE and
+ If the node is found and it is a file, pbIsFile = TRUE and
  pulSize = length of file contents (in bytes). If it's a dir,
- the only change is isFile = false.
+ the only change is pbIsFile = false.
 */
-int FT_stat(const char *pcPath, boolean *isFile, size_t *pulSize)
-{
+int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize){
     int iStatus;
     Node_T oNFound = NULL;
 
     assert(pcPath != NULL);
-    assert(isFile != NULL);
+    assert(pbIsFile != NULL);
     assert(pulSize != NULL);
 
     iStatus = FT_findNode(pcPath, &oNFound);
@@ -495,13 +494,13 @@ int FT_stat(const char *pcPath, boolean *isFile, size_t *pulSize)
 
     if (Node_isFile(oNFound))
     {
-        *isFile = TRUE;
+        *pbIsFile = TRUE;
         *pulSize = Node_getLength(oNFound);
     }
     else
     {
         /* for a directory, *pulSize stays unchanged */
-        *isFile = FALSE;
+        *pbIsFile = FALSE;
     }
 
     return SUCCESS;
