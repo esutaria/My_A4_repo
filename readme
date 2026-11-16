@@ -160,21 +160,6 @@ express your disagreement after each warning. If there are no
 warnings, then write "None."
 
 
-   ft.c: line 251: low priority: 
-   A loop should consist of fewer than 35 lines;
-   this loop consists of 36 lines; consider refactoring
-		Our code is well commented and the functions have
-            been working well and with good memory management.
-            We are not treating this as a problem.
-
-
-   ft.c: line 655: low priority: 
-   A file should contain no more than 15 functions;
-   this file contains 18 functions
-		Our code is well commented and the functions have been
-            working well and with good memory management. We are not
-            treating this as a problem.
-
 
    ft.c: line 191: medium priority:
    Do you want to validate 'pvContents' through an assert?
@@ -193,27 +178,24 @@ warnings, then write "None."
 	No, because this function calls FT_insertPath, which will
       assert this.
 
+   ft.c: line 321: medium priority:
+   Do you want to validate 'pvContents' through an assert?
+      No, because the contents could be NULL. If they are inserting
+      a directory, pvContents should be NULL.
 
-   ft.c: line 654: low priority: 
-   A source code file should contain fewer than 500 lines;
-   this file contains 655 lines
-	Our code is well commented and the functions have been
-      working well and with good memory management. We are not
-      treating this as a problem.
+   ft.c: line 456: medium priority:
+   Do you want to validate 'pvNewContents' through an assert?
+      No because they can be NULL.
+
 
    nodeFT.c: line 63: medium priority:
    Do you want to validate 'pvContents' through an assert?
-      The client passes NULL contents on purpose (FT_insertDir)
-      passes NULL. Ft.h also says contents may be new so we do 
-      not need this assert and adding it would actually make the
-      ./ft crash.
+      No, because the contents could be NULL. If they are inserting
+      a directory, pvContents should be NULL.
 
    nodeFT.c: line 344: medium priority:
    Do you want to validate 'pvNewContents' through an assert?
-
-      FT_insertFile("1root/2second/3gfile", NULL, 0) is a valid call 
-      and ft.h says contents may be NULL. Adding this assert is not 
-      necessary and would make ./ft crash.
+      No becuase they can be null. 
 
 
 
@@ -227,9 +209,9 @@ the error manifests itself or is "noticed" by the client.
 
       Executable         Function with the underlying error
 ===============================================================
-         ./bdtBad1        BDT_insert (no isInitialized check)
+         ./bdtBad1        BDT_insert
 ---------------------------------------------------------------
-         ./bdtBad2        BDT_rm
+         ./bdtBad2        BDT_freeSubtree
 ---------------------------------------------------------------
          ./bdtBad3        BDT_addChild
 ---------------------------------------------------------------
