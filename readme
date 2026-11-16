@@ -92,7 +92,7 @@ and the COS 217 Generative AI policy, disclose and describe how you
 used AI in completing this assignment:
 
 We used AI to help guide us in understanding the requirements of the
-assignment and help us debug.
+assignment and help us debug the third part of the assignment.
 
 ------------------------------------------------------------------------
 Student 1: What is your assessment of the assignment? Was it helpful?
@@ -195,7 +195,7 @@ warnings, then write "None."
 
    nodeFT.c: line 344: medium priority:
    Do you want to validate 'pvNewContents' through an assert?
-      No becuase they can be null. 
+      No because they can be null. 
 
 
 
